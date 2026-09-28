@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodShare – Surplus Food Donation Matching Platform</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+      <div class="header-left">
+        <button id="sidebarToggle" class="icon-btn" aria-label="Toggle menu">☰</button>
+        <div class="brand">
+          <span class="brand-icon">🍽️</span>
+          <div>
+            <h1 class="brand-name">FoodShare</h1>
+            <p class="brand-tagline">Surplus Food Donation Matching Platform</p>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="header-badge" id="apiStatus">Connecting…</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- ========== SIDEBAR ========== -->
+      <nav class="sidebar" id="sidebar">
+        <a href="#" class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="#" class="nav-item" data-view="donors">
+          <span class="nav-icon">🏢</span> Donors
+        </a>
+        <a href="#" class="nav-item" data-view="listings">
+          <span class="nav-icon">📦</span> Food Listings
+        </a>
+        <a href="#" class="nav-item" data-view="claims">
+          <span class="nav-icon">🤝</span> NGO Claims
+        </a>
+        <a href="#" class="nav-item" data-view="statistics">
+          <span class="nav-icon">📈</span> Statistics
+        </a>
+      </nav>
+
+      <main class="main-content">
+        <!-- ========== DASHBOARD ========== -->
+        <section id="view-dashboard" class="view active">
+          <div class="section-header">
+            <h2>Dashboard</h2>
+            <button class="btn btn-outline" onclick="loadDashboard()">🔄 Refresh</button>
+          </div>
+
+          <div class="stat-cards">
+            <div class="stat-card stat-green">
+              <div class="stat-icon">♻️</div>
+              <div class="stat-body">
+                <p class="stat-label">Total Food Diverted</p>
+                <p class="stat-value" id="dashTotalDiverted">— kg</p>
+              </div>
+            </div>
+            <div class="stat-card stat-blue">
+              <div class="stat-icon">📦</div>
+              <div class="stat-body">
+                <p class="stat-label">Available Food</p>
+                <p class="stat-value" id="dashAvailable">—</p>
+              </div>
+            </div>
+            <div class="stat-card stat-teal">
+              <div class="stat-icon">🤝</div>
+              <div class="stat-body">
+                <p class="stat-label">NGO Claims</p>
+                <p class="stat-value" id="dashClaims">—</p>
+              </div>
+            </div>
+            <div class="stat-card stat-red">
+              <div class="stat-icon">⚠️</div>
+              <div class="stat-body">
+                <p class="stat-label">Expired Food</p>
+                <p class="stat-value" id="dashExpired">—</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="card">
+              <h3 class="card-title">Recent Food Listings</h3>
+              <div id="recentListings" class="table-wrap">
+                <p class="loading-text">Loading…</p>
+              </div>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Recent NGO Claims</h3>
+              <div id="recentClaims" class="table-wrap">
+                <p class="loading-text">Loading…</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== DONORS ========== -->
+        <section id="view-donors" class="view">
+          <div class="section-header">
+            <h2>Donors</h2>
+            <div class="section-actions">
+              <button class="btn btn-outline" onclick="loadDonors()">🔄 Refresh</button>
+              <button class="btn btn-primary" onclick="openModal('donorModal')">+ Register Donor</button>
+            </div>
+          </div>
+          <div class="card">
+            <div id="donorsTable" class="table-wrap">
+              <p class="loading-text">Loading…</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== FOOD LISTINGS ========== -->
+        <section id="view-listings" class="view">
+          <div class="section-header">
+            <h2>Food Listings</h2>
+            <div class="section-actions">
+              <button class="btn btn-outline" onclick="loadFoodListings()">🔄 Refresh</button>
+              <button class="btn btn-primary" onclick="openModal('listingModal')">+ Add Food Listing</button>
+            </div>
+          </div>
+          <div class="card">
+            <div id="listingsTable" class="table-wrap">
+              <p class="loading-text">Loading…</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== NGO CLAIMS ========== -->
+        <section id="view-claims" class="view">
+          <div class="section-header">
+            <h2>NGO Claims</h2>
+            <div class="section-actions">
+              <button class="btn btn-outline" onclick="loadClaims()">🔄 Refresh</button>
+              <button class="btn btn-primary" onclick="openModal('claimModal')">+ Claim Food</button>
+            </div>
+          </div>
+          <div class="card">
+            <div id="claimsTable" class="table-wrap">
+              <p class="loading-text">Loading…</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== STATISTICS ========== -->
+        <section id="view-statistics" class="view">
+          <div class="section-header">
+            <h2>Statistics</h2>
+            <button class="btn btn-outline" onclick="loadStatistics()">🔄 Refresh</button>
+          </div>
+          <div id="statisticsContent">
+            <p class="loading-text">Loading…</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ========== MODAL: REGISTER DONOR ========== -->
+    <div class="modal-overlay" id="donorModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Register Donor</h3>
+          <button class="icon-btn" onclick="closeModal('donorModal')">×</button>
+        </div>
+        <form id="donorForm" class="modal-form">
+          <label>
+            Name
+            <input type="text" name="name" required placeholder="ABC Restaurant" />
+          </label>
+          <label>
+            Contact
+            <input type="text" name="contact" required placeholder="9876543210" />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required placeholder="abc@gmail.com" />
+          </label>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal('donorModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========== MODAL: ADD FOOD LISTING ========== -->
+    <div class="modal-overlay" id="listingModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add Food Listing</h3>
+          <button class="icon-btn" onclick="closeModal('listingModal')">×</button>
+        </div>
+        <form id="listingForm" class="modal-form">
+          <label>
+            Donor ID
+            <input type="number" name="donorId" required placeholder="1" />
+          </label>
+          <label>
+            Food Type
+            <input type="text" name="foodType" required placeholder="Vegetable Rice" />
+          </label>
+          <label>
+            Quantity (kg)
+            <input type="number" name="quantity" required step="0.1" min="0" placeholder="25" />
+          </label>
+          <label>
+            Safe To Eat Until
+            <input type="datetime-local" name="safeToEatUntil" required />
+          </label>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal('listingModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Listing</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========== MODAL: CLAIM FOOD ========== -->
+    <div class="modal-overlay" id="claimModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Claim Food</h3>
+          <button class="icon-btn" onclick="closeModal('claimModal')">×</button>
+        </div>
+        <form id="claimForm" class="modal-form">
+          <label>
+            Food Listing ID
+            <input type="number" name="foodListingId" required placeholder="1" />
+          </label>
+          <label>
+            NGO Name
+            <input type="text" name="ngoName" required placeholder="Helping Hands NGO" />
+          </label>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal('claimModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Claim</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========== NOTIFICATIONS ========== -->
+    <div id="notifications" class="notifications"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
