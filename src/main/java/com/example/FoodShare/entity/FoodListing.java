@@ -18,7 +18,7 @@ public class FoodListing {
 
     @Positive(message = "Quantity must be greater than zero")
     private double quantity;
-
+    private LocalDateTime updatedAt;
     private LocalDateTime safeToEatUntil;
 
     @Enumerated(EnumType.STRING)
@@ -78,5 +78,12 @@ public class FoodListing {
 
     public void setDonor(Donor donor) {
         this.donor = donor;
+    }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
