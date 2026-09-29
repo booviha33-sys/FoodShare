@@ -1288,3 +1288,413 @@ async function claimFood(e) {
       "Submit Claim";
   }
 }
+/* =========================================================
+   FOODSHARE AUTHENTICATION
+   ========================================================= */
+
+const AUTH_API_URL = "http://localhost:8080/auth";
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const authScreen =
+        document.getElementById("authScreen");
+
+    const loginSection =
+        document.getElementById("loginSection");
+
+    const registerSection =
+        document.getElementById("registerSection");
+
+    const showRegister =
+        document.getElementById("showRegister");
+
+    const showLogin =
+        document.getElementById("showLogin");
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const registerForm =
+        document.getElementById("registerForm");
+
+
+    /*
+     * If authentication HTML is not present,
+     * don't run authentication code.
+     */
+
+    if (!authScreen ||
+        !loginForm ||
+        !registerForm) {
+
+        return;
+    }
+
+
+    /*
+     * Check whether user is already logged in.
+     */
+
+    const savedUser =
+        sessionStorage.getItem("foodshareUser");
+
+
+    if (savedUser) {
+
+        authScreen.style.display = "none";
+
+        createLogoutButton();
+
+    } else {
+
+        authScreen.style.display = "flex";
+    }
+
+
+    /*
+     * Show Register
+     */
+
+    showRegister.addEventListener(
+        "click",
+        function () {
+
+            loginSection.style.display = "none";
+
+            registerSection.style.display = "block";
+
+            const loginMessage =
+                document.getElementById("loginMessage");
+
+            loginMessage.textContent = "";
+        }
+    );
+
+
+    /*
+     * Show Login
+     */
+
+    showLogin.addEventListener(
+        "click",
+        function () {
+
+            registerSection.style.display = "none";
+
+            loginSection.style.display = "block";
+
+            const registerMessage =
+                document.getElementById("registerMessage");
+
+            registerMessage.textContent = "";
+        }
+    );
+
+
+    /*
+     * LOGIN
+     */
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document
+                    .getElementById("loginEmail")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("loginPassword")
+                    .value;
+
+
+            const message =
+                document
+                    .getElementById("loginMessage");
+
+
+            message.textContent =
+                "Logging in...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${AUTH_API_URL}/login`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                email: email,
+                                password: password
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Login failed"
+                    );
+                }
+
+
+                /*
+                 * Store user information
+                 */
+
+                sessionStorage.setItem(
+                    "foodshareUser",
+                    JSON.stringify(data)
+                );
+
+
+                message.textContent =
+                    "Login successful";
+
+
+                /*
+                 * Hide login screen
+                 */
+
+                setTimeout(
+                    function () {
+
+                        authScreen.style.display =
+                            "none";
+
+                        createLogoutButton();
+
+                    },
+                    500
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                message.textContent =
+                    error.message ||
+                    "Unable to connect to server.";
+            }
+
+        }
+    );
+
+
+    /*
+     * REGISTER
+     */
+
+    registerForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("registerName")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("registerEmail")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("registerPassword")
+                    .value;
+
+
+            const role =
+                document
+                    .getElementById("registerRole")
+                    .value;
+
+
+            const message =
+                document
+                    .getElementById("registerMessage");
+
+
+            message.textContent =
+                "Creating account...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${AUTH_API_URL}/register`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                name: name,
+                                email: email,
+                                password: password,
+                                role: role
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Registration failed"
+                    );
+                }
+
+
+                message.textContent =
+                    "Registration successful!";
+
+
+                /*
+                 * Clear registration form
+                 */
+
+                registerForm.reset();
+
+
+                /*
+                 * Move back to Login
+                 */
+
+                setTimeout(
+                    function () {
+
+                        registerSection.style.display =
+                            "none";
+
+                        loginSection.style.display =
+                            "block";
+
+
+                        document
+                            .getElementById(
+                                "loginEmail"
+                            )
+                            .value = email;
+
+
+                        message.textContent = "";
+
+                    },
+                    1000
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Registration error:",
+                    error
+                );
+
+
+                message.textContent =
+                    error.message ||
+                    "Unable to connect to server.";
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+function createLogoutButton() {
+
+    /*
+     * Don't create duplicate buttons.
+     */
+
+    if (
+        document.getElementById(
+            "foodshareLogoutButton"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const button =
+        document.createElement("button");
+
+
+    button.id =
+        "foodshareLogoutButton";
+
+
+    button.className =
+        "foodshare-logout";
+
+
+    button.textContent =
+        "Logout";
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            sessionStorage.removeItem(
+                "foodshareUser"
+            );
+
+            location.reload();
+        }
+    );
+
+
+    document.body.appendChild(button);
+}

@@ -16,6 +16,208 @@
     <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
   <body>
+    <!-- ================= AUTH SCREEN ================= -->
+
+<div id="authScreen" class="auth-screen">
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <h1>FoodShare</h1>
+            <p>Surplus Food Donation Platform</p>
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginSection">
+
+            <h2>Login</h2>
+
+            <form id="loginForm">
+
+                <div class="auth-field">
+                    <label for="loginEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+
+                <div class="auth-field">
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <p
+                id="loginMessage"
+                class="auth-message"
+            ></p>
+
+
+            <div class="auth-switch">
+
+                Don't have an account?
+
+                <button
+                    type="button"
+                    id="showRegister"
+                >
+                    Register
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <div
+            id="registerSection"
+            style="display: none;"
+        >
+
+            <h2>Create Account</h2>
+
+            <form id="registerForm">
+
+                <div class="auth-field">
+
+                    <label for="registerName">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="registerName"
+                        placeholder="Enter your name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Minimum 6 characters"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerRole">
+                        Role
+                    </label>
+
+                    <select
+                        id="registerRole"
+                        required
+                    >
+
+                        <option value="">
+                            Select your role
+                        </option>
+
+                        <option value="DONOR">
+                            Donor
+                        </option>
+
+                        <option value="NGO">
+                            NGO
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                >
+                    Register
+                </button>
+
+            </form>
+
+
+            <p
+                id="registerMessage"
+                class="auth-message"
+            ></p>
+
+
+            <div class="auth-switch">
+
+                Already have an account?
+
+                <button
+                    type="button"
+                    id="showLogin"
+                >
+                    Login
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
     <!-- ========== HEADER ========== -->
     <header class="header">
       <div class="header-left">
